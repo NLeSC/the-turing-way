@@ -1,6 +1,7 @@
+<a name="General_guidance_and_good_practice_for_testing"></a>
 # General guidance and good practice for testing
 
-There are a number of of testing which each have best practice specific to them. Nevertheless there is some general guidance that applies to all of them, which will be outlined here.
+There are several [different kinds](#Types_of_tests) of testing which each have best practice specific to them. Nevertheless, there is some general guidance that applies to all of them, which will be outlined here.
 
 ## Table of contents
 
@@ -16,7 +17,7 @@ There are a number of of testing which each have best practice specific to them.
 <a name="Write_tests_any_tests"></a>
 ### Write tests. Any tests.
 
-Starting the process of writing tests can be overwhelming, especially if you have a large code base. Further to that, as mentioned, there are many kinds of tests, and implementing all of them can seem like an impossible mountain to climb. That is why the single most important piece of guidance in this chapter is as follows: **write some tests**. Testing one tiny thing in a code that's thousands of lines long is infinitely better than testing no things in a code that's thousands of lines long. You may not be able to do everything, but doing *something* is valuable.
+Starting the process of writing tests can be overwhelming, especially if you have a large codebase. Further to that, as mentioned, there are many kinds of tests, and implementing all of them can seem like an impossible mountain to climb. That is why the single most important piece of guidance in this chapter is as follows: **write some tests**. Testing one tiny thing in a code that's thousands of lines long is infinitely better than testing nothing in a code that is thousands of lines long. You may not be able to do everything, but doing *something* is valuable.
 
 Do not be discouraged. Make improvements where you can, and do your best to include tests with new code you write even if it's not feasible to write tests for all the code that's already written.
 
@@ -32,7 +33,7 @@ Consider setting up continuous integration (discussed in the continuous integrat
 <a name="Consider_how_long_it_takes_your_tests_to_run"></a>
 ### Consider how long it takes your tests to run
 
-Some tests, like [unit tests](#Unit_tests) only test a small piece of code and so typically are very fast. However other kinds of tests, such as [system tests](#System_tests) which test the entire code from end to end, may take a long time to run depending on the code. As such it can be obstructive to run the entire test suite after each little bit of work. In that case it is better to run lighter weight tests such as unit tests frequently, and longer tests only once per day overnight. It is also good to scale the number of each kind of tests you have in relation to how long they take to run. You should have a lot of unit tests (or other types of tests that are fast) but much fewer tests which take a long time to run.
+Some tests, like [unit tests](#Unit_tests) only test a small piece of code and so typically are very fast. However other kinds of tests, such as [system tests](#System_tests) which test the entire code from end to end, may take a long time to run depending on the code. As such it can be obstructive to run the entire test suite after each little bit of work. In that case, it is better to run lighter weight tests such as unit tests frequently, and longer tests only once per day overnight. It is also good to scale the number of each kind of tests you have in relation to how long they take to run. You should have a lot of unit tests (or other types of tests that are fast) but much fewer tests which take a long time to run.
 
 <a name="Document_the_tests_and_how_to_run_them"></a>
 ### Document the tests and how to run them
@@ -80,9 +81,9 @@ There are tools available to make writing and running tests easier, these are kn
 <a name="Aim_to_have_a_good_code_coverage"></a>
 ### Aim to have a good code coverage
 
-Code coverage is a measure of how much of your code is "covered" by tests. More precisely it a measure of how much of your code is run when tests are conducted. So for example, if you have a `if` statement but only test things where that if statement evaluates to "True" then none of the code that comes under "False" will be run. As a result your code coverage would be < 100% (the exact number would depend on how much code comes under the True and False cases). Code coverage doesn't include documentation like comments, so adding more documentation doesn't affect your percentages.
+Code coverage is a measure of how much of your code is "covered" by tests. More precisely it a measure of how much of your code is run when tests are conducted. So for example, if you have an `if` statement but only test things where that if statement evaluates to "True" then none of the code that comes under "False" will be run. As a result, your code coverage would be < 100% (the exact number would depend on how much code comes under the True and False cases). Code coverage doesn't include documentation like comments, so adding more documentation doesn't affect your percentages.
 
-As [mentioned](#Write_tests_any_tests) any tests are an improvement over no tests. Nevertheless it is good to at least aspire to having your code coverage as high as feasible.
+As [mentioned](#Write_tests_any_tests) any tests are an improvement over no tests. Nevertheless, it is good to at least aspire to have your code coverage as high as feasible.
 
 Most programming languages have tools either built into them, or that can be imported, or as part of testing frameworks, which automatically measure code coverage. There's also a nice little [bot](https://codecov.io/) for measuring code coverage available too.
 
@@ -91,13 +92,13 @@ Most programming languages have tools either built into them, or that can be imp
 <a name="Use_test_doubles_stubs_mocking_where_appropriate"></a>
 ### Use test doubles/stubs/mocking where appropriate
 
-If a test fails it should be constructed such that it is as easy to trace the source of the failure as possible. This becomes problematic if a piece of code you want to test unavoidably depends on other things. For example if a test for a piece of code that interacts with the web fails, that could be because the code has a bug *or* because there is a problem with the internet connection. Similarly if a test for a piece of code that uses an object fails it could be because there is a bug in the code being tested, or a problem with the object (which should be tested by its own, separate tests). These dependencies should be eliminated from tests, if possible. This can be done by using test replacements (test doubles) in the place of the real dependencies. Test doubles can be classified as follows:
+If a test fails it should be constructed such that it is as easy to trace the source of the failure as possible. This becomes problematic if a piece of code you want to test unavoidably depends on other things. For example, if a test for a piece of code that interacts with the web fails, that could be because the code has a bug *or* because there is a problem with the internet connection. Similarly, if a test for a piece of code that uses an object fails it could be because there is a bug in the code being tested, or a problem with the object (which should be tested by its own, separate tests). These dependencies should be eliminated from tests, if possible. This can be done by using test replacements (test doubles) in the place of the real dependencies. Test doubles can be classified as follows:
 
-- A dummy object is passed around but never used, meaning its methods are never called. Such an object can for example be used to fill the parameter list of a method.
-- Fake objects have working implementations, but are usually simplified. For example, they use an in memory database and not a real database.
-- A stub is a partial implementation for an interface or class with the purpose of using an instance of this stub during testing. Stubs usually don’t respond to anything outside what’s programmed in for the test. Stubs may also record information about calls.
+- A dummy object is passed around but never used, meaning its methods are never called. Such an object can, for example, be used to fill the parameter list of a method.
+- Fake objects have working implementations, but are usually simplified. For example, they use an in-memory database and not a real database.
+- A stub is a partial implementation for an interface or class to use an instance of this stub during testing. Stubs usually don’t respond to anything outside what’s programmed in for the test. Stubs may also record information about calls.
 - A mock object is a dummy implementation for an interface or a class in which you define the output of certain method calls. Mock objects are configured to perform a certain behaviour during a test. They typically record the interaction with the system and tests can validate that.
 
 Test doubles can be passed to other objects which are tested.
 
-You can create mock objects manually (via code) or use a mock framework to simulate these classes. Mock frameworks allow you to create mock objects at runtime and define their behaviour. The classical example for a mock object is a data provider. In production an implementation to connect to the real data source is used. But for testing a mock object simulates the data source and ensures that the test conditions are always the same.
+You can create mock objects manually (via code) or use a mock framework to simulate these classes. Mock frameworks allow you to create mock objects at runtime and define their behaviour. The classical example of a mock object is a data provider. In production, an implementation to connect to the real data source is used. But for testing a mock object simulates the data source and ensures that the test conditions are always the same.

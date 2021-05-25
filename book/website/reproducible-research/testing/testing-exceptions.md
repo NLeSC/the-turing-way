@@ -1,3 +1,4 @@
+<a name="Challenges_and_exceptional_cases_in_testing"></a>
 # Challenges and exceptional cases in testing
 
 ## Table of contents
@@ -21,7 +22,7 @@ Sometimes code contains an element of randomness, a common example being code th
 
 Random number seeds are a little difficult to explain so here's an example. Here's a little Python script that prints three random numbers.
 
-    ```
+    ```Python
     import random
 
     # Print three random numbers
@@ -32,7 +33,7 @@ Random number seeds are a little difficult to explain so here's an example. Here
 
 This script has no bugs but if you run it repeatedly you will get different answers each time. Now let's set a random number seed.
 
-    ```
+    ```Python
     import random
 
     # Set a random number seed
@@ -46,7 +47,7 @@ This script has no bugs but if you run it repeatedly you will get different answ
 
 Now if you run this script it outputs
 
-    ```
+    ```Python
     0.134364244112
     0.847433736937
     0.763774618977
@@ -54,16 +55,16 @@ Now if you run this script it outputs
 
 and every time you run this script you will get the *same* output, it will print the *same* three random numbers. If the random number seed is changed you will get a different three random numbers:
 
-    ```
+    ```Python
     0.956034271889
     0.947827487059
     0.0565513677268
     ```
 but again you will get those same numbers every time the script is run in the future.
 
-Random number seeds are a way of making things reliably random. However a risk with tests that depend on random number seeds is they can be brittle. Say you have a function structured something like this:
+Random number seeds are a way of making things reliably random. However, a risk with tests that depend on random number seeds is they can be brittle. Say you have a function structured something like this:
 
-    ```
+    ```Python
     def my_function()
 
       a = calculation_that_uses_two_random_numbers()
@@ -73,7 +74,7 @@ Random number seeds are a way of making things reliably random. However a risk w
       c = a + b
     ```
 
-If you set the random number seed you will always get the same value of `c`, so it can be tested. But, say the model is changed and the function that calculates `a` uses a different number of random numbers that it did previously. Now not only will `a` be different but `b` will be too, because as shown above the random numbers outputted given a random number seed are in a fixed order. As a result the random numbers produced to calculate `b` will have changed. This can lead to tests failing when there is in fact no bug.
+If you set the random number seed you will always get the same value of `c`, so it can be tested. But, say the model is changed and the function that calculates `a` uses a different number of random numbers that it did previously. Now not only will `a` be different but `b` will be too, because as shown above the random numbers outputted given a random number seed are in a fixed order. As a result, the random numbers produced to calculate `b` will have changed. This can lead to tests failing when there is, in fact, no bug.
 
 <a name="Measure_the_distribution_of_results"></a>
 #### Measure the distribution of results
@@ -85,7 +86,7 @@ Both of these approaches to testing stochastic code can still be very useful, bu
 <a name="Tests_that_are_difficult_to_quantify"></a>
 ### Tests that are difficult to quantify
 
-Sometimes (particularly in research) the outputs of code are tested according to whether they "look" right. For example say we have a code modelling the water levels in a reservoir over time. The result may look like this:
+Sometimes (particularly in research) the outputs of code are tested according to whether they "look" right. For example, say we have a code modelling the water levels in a reservoir over time. The result may look like this:
 
 ![eyeball_test_1](../../figures/eyeball_test_1.jpg)
 
@@ -101,7 +102,7 @@ All of these outputs look very different but are valid. However, if a researcher
 
 ![eyeball_test_error](../../figures/eyeball_test_error.jpg)
 
-they could easily conclude there is a bug as a lake is unlikely to triple its volume and then lose it again in the space of a few hours. "Eyeballing" tests like these are time consuming as they must be done by a human. However the process can be partially or fully automated by creating basic "sanity checks". For example the water level at one time should be within, say, 10% of the water level at the previous time step. Another check could be that there are no negative values, as a lake can't be -30% full. These sort of tests can't cover every way something can be visibly wrong, but they are much easier to automate and will suffice for most cases.
+they could easily conclude there is a bug as a lake is unlikely to triple its volume and then lose it again in the space of a few hours. "Eyeballing" tests like these are time-consuming as they must be done by a human. However, the process can be partially or fully automated by creating basic "sanity checks". For example, the water level at one time should be within, say, 10% of the water level at the previous time step. Another check could be that there are no negative values, as a lake can't be -30% full. These sort of tests can't cover every way something can be visibly wrong, but they are much easier to automate and will suffice for most cases.
 
 <a name="Testing_if_non_integer_numbers_are_equal"></a>
 ### Testing if non-integer numbers are equal
@@ -113,7 +114,7 @@ There is a complication with testing if the answer a piece of code outputs is eq
 
 If we assign 0.1 to `a` and 0.2 to `b` and print their sum, we get 0.3, as expected.
 
-    ```
+    ```Python
     >>> a = 0.1
     >>> b = 0.2
     >>> print(a + b)
@@ -122,28 +123,28 @@ If we assign 0.1 to `a` and 0.2 to `b` and print their sum, we get 0.3, as expec
 
 If, however, we compare the result of `a` plus `b` to 0.3 we get False.
 
-    ```
+    ```Python
     >>> print(a + b == 0.3)
     False
     ```
 
 If we show the value of `a` plus `b` directly, we can see there is a subtle margin of error.
 
-    ```
+    ```Python
     >>> a + b
     0.30000000000000004
     ```
 
-This is because floating point numbers are approximations of real numbers. The result of floating point calculations can depend upon the compiler or interpreter, processor or system architecture and number of CPUs or processes being used. Obviously this can present a major obstacle for writing tests.
+This is because floating-point numbers are approximations of real numbers. The result of floating-point calculations can depend upon the compiler or interpreter, processor or system architecture and number of CPUs or processes being used. This can present a major obstacle for writing tests.
 
 <a name="Equality_in_a_floating_point_world"></a>
 #### Equality in a floating point world
 
-When comparing floating point numbers for equality, we have to compare to within a given tolerance, alternatively termed a threshold or delta. For example, we might consider the calculated and expected values of some number to be equal if the absolute value of their difference is within the absolute value of our tolerance.
+When comparing floating-point numbers for equality, we have to compare to within a given tolerance, alternatively termed a threshold or delta. For example, we might consider the calculated and expected values of some number to be equal if the absolute value of their difference is within the absolute value of our tolerance.
 
-Many testing frameworks provide functions for comparing equality of floating point numbers to within a given tolerance. For example for the framework pytest:
+Many testing frameworks provide functions for comparing equality of floating-point numbers to within a given tolerance. For example for the framework pytest:
 
-    ```
+    ```Python
     import pytest
 
     a = 0.1
